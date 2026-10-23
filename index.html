@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>홍콩 11.23–11.27 · 재혁 & 원우</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --haze:#E9ECEC;
+    --paper:#F7F8F8;
+    --ink:#17262C;
+    --ink-soft:#5D6E74;
+    --rule:#CDD5D6;
+    --island:#A8202D;
+    --island-wash:#F6E7E8;
+    --kowloon:#0E6157;
+    --kowloon-wash:#E2EDEA;
+    --amber:#C4801B;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--haze);
+    color:var(--ink);
+    font-family:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    font-feature-settings:"tnum" 1;
+  }
+  .wrap{max-width:44rem;margin:0 auto;background:var(--paper);min-height:100vh;
+    box-shadow:0 0 0 1px var(--rule)}
+
+  /* ---------- hero ---------- */
+  header{padding:2.6rem 1.5rem 1.6rem}
+  .dates{
+    font-family:"Gowun Batang",Georgia,serif;
+    font-size:clamp(2.6rem,11vw,4.1rem);
+    line-height:.98;letter-spacing:-.02em;margin:0;font-weight:700;
+  }
+  .dates small{font-size:.42em;font-weight:400;color:var(--ink-soft);letter-spacing:0}
+  .who{margin:.7rem 0 0;font-size:.95rem;color:var(--ink-soft)}
+  .flights{
+    margin:1.4rem 0 0;padding:.85rem 0 0;border-top:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;gap:.35rem 1.6rem;font-size:.83rem;color:var(--ink-soft)
+  }
+  .flights b{font-weight:600;color:var(--ink)}
+
+  /* ---------- crossing band ---------- */
+  .crossing{margin:1.4rem 1.5rem 0;font-size:.76rem;color:var(--ink-soft)}
+  .bar{display:flex;height:.42rem;border-radius:.21rem;overflow:hidden;margin-bottom:.45rem}
+  .bar i{display:block;height:100%}
+  .bar .i{flex:2.5;background:var(--island)}
+  .bar .x{flex:.5;background:linear-gradient(90deg,var(--island),var(--kowloon))}
+  .bar .k{flex:2;background:var(--kowloon)}
+  .legend{display:flex;justify-content:space-between}
+  .legend span:first-child{color:var(--island)}
+  .legend span:last-child{color:var(--kowloon)}
+
+  /* ---------- pills ---------- */
+  nav{position:sticky;top:0;z-index:5;background:var(--paper);
+    padding:1.1rem 1.5rem .9rem;border-bottom:1px solid var(--rule)}
+  .pills{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+  .pills::-webkit-scrollbar{display:none}
+  .pill{
+    flex:0 0 auto;border:1px solid var(--rule);background:transparent;
+    border-radius:999px;padding:.44rem .8rem;cursor:pointer;
+    font-family:inherit;font-size:.85rem;font-weight:500;color:var(--ink-soft);
+    line-height:1.25;white-space:nowrap;
+  }
+  .pill b{font-weight:600}
+  .pill:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .pill[aria-selected="true"]{color:#fff;border-color:transparent}
+  .pill.is-island[aria-selected="true"]{background:var(--island)}
+  .pill.is-kowloon[aria-selected="true"]{background:var(--kowloon)}
+  .pill.is-note[aria-selected="true"]{background:var(--ink)}
+
+  /* ---------- day ---------- */
+  .day[hidden]{display:none}
+  .day-head{padding:1.5rem 1.5rem .3rem}
+  .day-title{font-family:"Gowun Batang",Georgia,serif;font-size:1.55rem;font-weight:700;margin:0}
+  .base{margin:.4rem 0 0;font-size:.86rem;color:var(--ink-soft)}
+  .base em{font-style:normal;font-weight:600}
+  .is-island .base em{color:var(--island)}
+  .is-kowloon .base em{color:var(--kowloon)}
+
+  /* ---------- timeline ---------- */
+  ol{list-style:none;margin:0;padding:1.1rem 1.5rem 2.6rem}
+  li{display:grid;grid-template-columns:3.4rem 1fr;gap:0 .9rem;position:relative;padding-bottom:1.35rem}
+  li::before{content:"";position:absolute;left:3.85rem;top:1.5rem;bottom:0;width:1px;background:var(--rule)}
+  li:last-child::before{display:none}
+  .t{font-size:.82rem;font-weight:600;color:var(--ink-soft);padding-top:.15rem;text-align:right}
+  .dot{position:absolute;left:3.55rem;top:.5rem;width:.6rem;height:.6rem;border-radius:50%;
+    background:var(--paper);box-shadow:0 0 0 1.5px var(--rule)}
+  .is-island li.key .dot{background:var(--island);box-shadow:0 0 0 1.5px var(--island)}
+  .is-kowloon li.key .dot{background:var(--kowloon);box-shadow:0 0 0 1.5px var(--kowloon)}
+  .n{margin:0;font-size:1.02rem;font-weight:500;line-height:1.35}
+  .n .e{margin-right:.3rem}
+  .hrs{font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-left:.25rem;white-space:nowrap}
+  .d{margin:.22rem 0 0;font-size:.85rem;color:var(--ink-soft)}
+  .m{margin:.3rem 0 0;font-size:.78rem;display:flex;flex-wrap:wrap;gap:.3rem}
+  .m span{border:1px solid var(--rule);border-radius:.25rem;padding:.05rem .4rem;color:var(--ink-soft)}
+  .m span.warn{border-color:var(--amber);color:var(--amber)}
+
+  /* ---------- notes ---------- */
+  .note-sec{padding:1.5rem 1.5rem 0}
+  .note-sec h3{font-family:"Gowun Batang",Georgia,serif;font-size:1.15rem;margin:0 0 .7rem}
+  .note-sec:last-of-type{padding-bottom:2.6rem}
+  .book{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+  .book li{display:block;padding:.65rem .8rem;border:1px solid var(--rule);border-radius:.4rem}
+  .book li::before{display:none}
+  .book b{font-weight:600}
+  .book span{display:block;font-size:.82rem;color:var(--ink-soft);margin-top:.15rem}
+  .facts{margin:0;padding:0;list-style:none;display:grid;gap:.6rem}
+  .facts li{display:grid;grid-template-columns:auto 1fr;gap:.55rem;padding:0;font-size:.88rem}
+  .facts li::before{display:none}
+  .facts i{font-style:normal;color:var(--amber);font-weight:600}
+  footer{padding:1.4rem 1.5rem 2.4rem;border-top:1px solid var(--rule);
+    font-size:.78rem;color:var(--ink-soft)}
+
+  @media (prefers-reduced-motion:no-preference){
+    .day{animation:in .22s ease-out}
+    @keyframes in{from{opacity:0}to{opacity:1}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1 class="dates">11.23<small> – </small>11.27<br><small>Hong Kong 2026</small></h1>
+  <p class="who">재혁 &amp; 원우 · 4박 5일</p>
+  <div class="flights">
+    <span><b>CX417</b> 인천 10:00 → 홍콩 13:15</span>
+    <span><b>CX416</b> 홍콩 16:50 → 인천 21:25</span>
+  </div>
+</header>
+
+<div class="crossing">
+  <div class="bar"><i class="i"></i><i class="x"></i><i class="k"></i></div>
+  <div class="legend"><span>완차이 · AKI 엠갤러리 2박</span><span>침사추이 · 몬드리안 2박</span></div>
+</div>
+
+<nav>
+  <div class="pills" role="tablist">
+    <button class="pill is-island" role="tab" aria-selected="true"  aria-controls="d1" id="t1"><b>월</b> 23</button>
+    <button class="pill is-island" role="tab" aria-selected="false" aria-controls="d2" id="t2"><b>화</b> 24</button>
+    <button class="pill is-kowloon" role="tab" aria-selected="false" aria-controls="d3" id="t3"><b>수</b> 25</button>
+    <button class="pill is-kowloon" role="tab" aria-selected="false" aria-controls="d4" id="t4"><b>목</b> 26</button>
+    <button class="pill is-kowloon" role="tab" aria-selected="false" aria-controls="d5" id="t5"><b>금</b> 27</button>
+    <button class="pill is-note" role="tab" aria-selected="false" aria-controls="d6" id="t6">메모</button>
+  </div>
+</nav>
+
+<!-- ============ DAY 1 ============ -->
+<section class="day is-island" id="d1" role="tabpanel" aria-labelledby="t1">
+  <div class="day-head">
+    <h2 class="day-title">인천에서 완차이까지</h2>
+    <p class="base"><em>AKI 엠갤러리</em> 체크인 · 첫날은 조식 없음</p>
+  </div>
+  <ol>
+    <li><span class="dot"></span><div class="t">07:30</div><div>
+      <p class="n"><span class="e">🛫</span>인천공항 제1터미널</p>
+      <p class="d">케세이퍼시픽은 제1터미널을 쓴다. 카운터 번호는 3층 출발층 안내 모니터에서 확인한다.</p></div></li>
+    <li><span class="dot"></span><div class="t">08:00</div><div>
+      <p class="n"><span class="e">🎫</span>체크인 · 수하물 위탁</p>
+      <p class="d">체크인 마감은 출발 60분 전이다. 돌아올 때 와인을 담을 수 있도록 캐리어에 여유를 둔다.</p></div></li>
+    <li><span class="dot"></span><div class="t">09:00</div><div>
+      <p class="n"><span class="e">🛂</span>출국심사</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">10:00</div><div>
+      <p class="n"><span class="e">✈️</span>CX417 이륙</p>
+      <p class="d">비행 3시간 15분. 시차가 한 시간이라 도착 직후부터 움직여도 무리가 없다.</p></div></li>
+    <li><span class="dot"></span><div class="t">13:15</div><div>
+      <p class="n"><span class="e">🛬</span>홍콩국제공항 도착</p>
+      <p class="d">입국심사와 수하물 수취까지 약 45분.</p></div></li>
+    <li><span class="dot"></span><div class="t">14:15</div><div>
+      <p class="n"><span class="e">🚄</span>에어포트 익스프레스 <span class="hrs">24분</span></p>
+      <p class="d">홍콩역까지 옥토퍼스로 HK$120. MTR 무료 셔틀버스는 코로나 때 중단된 뒤 돌아오지 않았다.</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">15:00</div><div>
+      <p class="n"><span class="e">🚕</span>택시로 AKI 체크인</p>
+      <p class="d">239 Jaffe Road. 홍콩역에서 8~10분, HK$60~80. 짐이 있으니 MTR을 갈아타는 것보다 택시가 낫다.</p>
+      <p class="m"><span>홍콩섬 시내는 빨간 택시</span></p></div></li>
+    <li><span class="dot"></span><div class="t">16:00</div><div>
+      <p class="n"><span class="e">🛒</span>Remfly Wines <span class="hrs">11:00–20:00</span></p>
+      <p class="d">글로스터로드에 있다. 호텔에서 도보 8분.</p>
+      <p class="m"><span class="warn">구경만 · 보관 상태 후기가 나쁘다</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">16:45</div><div>
+      <p class="n"><span class="e">🥐</span>Bakehouse 완차이 <span class="hrs">08:00–21:00</span></p>
+      <p class="d">14 Tai Wong Street East. 2018년에 문을 연 1호점이고, 여러 지점 중 유일하게 앉아서 먹을 수 있다. 사워도우 에그타르트가 간판이다.</p>
+      <p class="m"><span>완차이역 B2 출구</span><span>커피와 함께 잠깐</span></p></div></li>
+    <li><span class="dot"></span><div class="t">18:00</div><div>
+      <p class="n"><span class="e">🛒</span>Watson's Wine</p>
+      <p class="d">호프웰센터 3층. 홍콩은 와인이 무관세라 프로모션 가격이 특히 좋다.</p>
+      <p class="m"><span class="warn">19:30 마감</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">19:00</div><div>
+      <p class="n"><span class="e">🍽</span>船記 Ship Kee</p>
+      <p class="d">차슈 · 소금생선 얹은 돼지고기 찜 · 구운 게딱지</p>
+      <p class="m"><span>같은 건물 6층</span><span class="warn">예약 필수</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">21:00</div><div>
+      <p class="n"><span class="e">🍷</span>酒未 Zau Mei Wine Bar</p>
+      <p class="d">Ship Street 33. 글라스 와인이 다양하고 이탈리아 셀렉션이 특히 좋다.</p>
+      <p class="m"><span>도보 5분</span><span>~24:00</span></p></div></li>
+  </ol>
+</section>
+
+<!-- ============ DAY 2 ============ -->
+<section class="day is-island" id="d2" role="tabpanel" aria-labelledby="t2" hidden>
+  <div class="day-head">
+    <h2 class="day-title">홍콩섬을 걷는 날</h2>
+    <p class="base"><em>AKI 엠갤러리</em> · 조식 TANGRAM 2층 06:30–10:30</p>
+  </div>
+  <ol>
+    <li><span class="dot"></span><div class="t">08:30</div><div>
+      <p class="n"><span class="e">☕</span>조식 · TANGRAM 2층 <span class="hrs">06:30–10:30</span></p>
+      <p class="d">세미뷔페지만 알라카르트가 핵심이다. 에그 베네딕트와 시그니처 콜드 누들을 권한다.</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">10:00</div><div>
+      <p class="n"><span class="e">☕</span>The Henderson · % ARABICA</p>
+      <p class="d">2 Murray Road 3층. 자하 하디드가 설계한 로비 안에 자리한 카페다. 나선형 계단과 스카이 가든도 함께 본다.</p>
+      <p class="m"><span class="warn">카페는 평일 08:30–18:00</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">12:00</div><div>
+      <p class="n"><span class="e">🍽</span>Mott 32</p>
+      <p class="d">헨더슨에서 도보 7분. 애플우드 베이징덕과 바비큐 이베리코 플루마가 대표 메뉴다.</p>
+      <p class="m"><span>11:30–14:30</span><span class="warn">베이징덕 예약 시 사전주문</span></p></div></li>
+    <li><span class="dot"></span><div class="t">14:00</div><div>
+      <p class="n"><span class="e">📷</span>타이쿤 → PMQ → 만모사원</p>
+      <p class="d">할리우드로드를 따라 서쪽으로 걷는다.</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">16:30</div><div>
+      <p class="n"><span class="e">🍜</span>沾仔記 Tsim Chai Kee <span class="hrs">11:00–21:30</span></p>
+      <p class="d">98 Wellington Street. 새우 완탕면 한 그릇에 HK$40이다. 와인 디너 전이니 한 그릇만 가볍게 먹는다. 여기서 미드레벨 에스컬레이터를 타면 소호까지 10분이다.</p>
+      <p class="m"><span>본점이 붐비면 퀸즈로드 센트럴 153번지 지하 지점</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">18:00</div><div>
+      <p class="n"><span class="e">🍷</span>James Suckling Wine Central</p>
+      <p class="d">22 Staunton Street 2층. 클로드 추천은 에르미타주 라 샤펠 1983과 캄프 그로 마르티넨가 1978. 둘 다 국제 시세와 거의 같은 값이다.</p>
+      <p class="m"><span class="warn">예약 필수 · 좌석 적음</span><span>일요일 휴무</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">21:30</div><div>
+      <p class="n"><span class="e">🍸</span>Penicillin</p>
+      <p class="d">23 Hollywood Road. 제로웨이스트 칵테일 바다. 코지 프라이드 치킨을 곁들인다.</p>
+      <p class="m"><span>도보 5분</span><span>~02:00</span></p></div></li>
+  </ol>
+</section>
+
+<!-- ============ DAY 3 ============ -->
+<section class="day is-kowloon" id="d3" role="tabpanel" aria-labelledby="t3" hidden>
+  <div class="day-head">
+    <h2 class="day-title">하버를 건너는 날</h2>
+    <p class="base">AKI 체크아웃 → <em>몬드리안</em> 체크인 · 조식 TANGRAM 2층 06:30–10:30</p>
+  </div>
+  <ol>
+    <li><span class="dot"></span><div class="t">08:30</div><div>
+      <p class="n"><span class="e">☕</span>조식 · TANGRAM 2층 <span class="hrs">06:30–10:30</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">11:00</div><div>
+      <p class="n"><span class="e">🧳</span>AKI 체크아웃</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">12:00</div><div>
+      <p class="n"><span class="e">🍽</span>DIECI</p>
+      <p class="d">29–31 Gough Street 지하. 파스타 미스타 · 탈리올리니와 보타르가 · 폴로 알라 레카르다</p>
+      <p class="m"><span>12:00–15:00</span><span class="warn">월요일 휴무</span></p></div></li>
+    <li><span class="dot"></span><div class="t">14:00</div><div>
+      <p class="n"><span class="e">🚕</span>택시로 침사추이 <span class="hrs">15~20분</span></p>
+      <p class="d">크로스하버 터널을 지난다. 터널 통행료를 포함해 HK$100~130이다. 짐이 있으니 스타페리보다 택시가 낫다.</p>
+      <p class="m"><span>홍콩섬에서 잡으면 빨간 택시</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">15:00</div><div>
+      <p class="n"><span class="e">🏨</span>몬드리안 체크인</p>
+      <p class="d">8A Hart Avenue, 침사추이</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">17:30</div><div>
+      <p class="n"><span class="e">🚌</span>H2K 야경버스 <span class="hrs">17:05–22:30</span></p>
+      <p class="d">오픈탑 2층 버스다. 센트럴 스타페리 부두와 서구룡문화지구를 왕복하며 템플스트리트 야시장, 침사추이 시계탑, 가든로드 피크트램역을 지난다. 클룩에서 미리 예매한다.</p>
+      <p class="m"><span>기본 배차 30분</span><span class="warn">20시 심포니 전까지 복귀</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">20:00</div><div>
+      <p class="n"><span class="e">🌃</span>심포니 오브 라이트</p>
+      <p class="d">객실에서 보고, 시야가 막히면 Avoca 38층으로 올라간다. 10~13분간 이어진다.</p>
+      <p class="m"><span>음악은 전용 앱으로</span><span class="warn">악천후 시 취소</span></p></div></li>
+    <li><span class="dot"></span><div class="t">21:00</div><div>
+      <p class="n"><span class="e">📷</span>몽콕 육교 · 네온 사인 코너</p>
+      <p class="d">통초이가 1A와 포틀랜드가 163. 침사추이에서 MTR 3정거장, 8분 거리다.</p>
+      <p class="m"><span>야시장 22:00까지</span></p></div></li>
+  </ol>
+</section>
+
+<!-- ============ DAY 4 ============ -->
+<section class="day is-kowloon" id="d4" role="tabpanel" aria-labelledby="t4" hidden>
+  <div class="day-head">
+    <h2 class="day-title">디즈니랜드</h2>
+    <p class="base"><em>몬드리안</em> · 조식 Avoca 38층 06:30–10:30 · 평일이라 티켓 최저 티어</p>
+  </div>
+  <ol>
+    <li><span class="dot"></span><div class="t">07:30</div><div>
+      <p class="n"><span class="e">☕</span>조식 · Avoca 38층 <span class="hrs">06:30–10:30</span></p>
+      <p class="d">세트 메뉴로 주문하는 편이 낫다. 직접 조합하는 메뉴에는 에그 베네딕트와 아시안 오믈렛이 빠진다.</p></div></li>
+    <li><span class="dot"></span><div class="t">09:15</div><div>
+      <p class="n"><span class="e">🚇</span>침사추이역 출발 <span class="hrs">약 40분</span></p>
+      <p class="d">췬완선으로 <b>라이킹역(Lai King 荔景)</b>까지 6정거장 12분. <b>맞은편 승강장</b>에서 둥청선으로 갈아타 <b>서니베이역(Sunny Bay 欣澳)</b>까지 2정거장 11분. 다시 디즈니선으로 갈아타면 6분 만에 <b>디즈니랜드 리조트역(Disneyland Resort 迪士尼)</b>이다.</p>
+      <p class="m"><span>편도 HK$18 안팎</span><span>옥토퍼스 미리 충전</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">10:15</div><div>
+      <p class="n"><span class="e">🎢</span>디즈니랜드 도착</p>
+      <p class="d">개장 15분 전에 게이트 앞에 선다. 문을 연 뒤 첫 90분이 하루 중 대기가 가장 짧다.</p></div></li>
+    <li><span class="dot"></span><div class="t">13:00</div><div>
+      <p class="n"><span class="e">🍽</span>파크 내 점심</p></div></li>
+    <li><span class="dot"></span><div class="t">15:00</div><div>
+      <p class="n"><span class="e">🎢</span>월드 오브 프로즌</p></div></li>
+    <li><span class="dot"></span><div class="t">18:00</div><div>
+      <p class="n"><span class="e">🎄</span>크리스마스 퍼레이드와 장식</p>
+      <p class="d">윈터페스트 기간이라 조명 연출이 더해진다.</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">20:00</div><div>
+      <p class="n"><span class="e">🎆</span>Momentous 불꽃쇼</p>
+      <p class="d">폐장 직전에 시작한다. 이걸 보려면 20:30까지 파크에 남아야 한다.</p></div></li>
+    <li><span class="dot"></span><div class="t">20:45</div><div>
+      <p class="n"><span class="e">🚇</span>디즈니랜드 리조트역 → 서니베이역 <span class="hrs">약 6분</span></p>
+      <p class="d">폐장 직후에는 역에 인파가 몰린다. 메인스트리트 상점가에서 20~30분 머물다 나오는 편이 훨씬 수월하다.</p></div></li>
+    <li><span class="dot"></span><div class="t">21:00</div><div>
+      <p class="n"><span class="e">🚇</span>서니베이역 → 라이킹역 → 침사추이역 <span class="hrs">약 25분</span></p>
+      <p class="d">서니베이역에서는 둥청선 <b>홍콩역(Hong Kong 香港) 방면</b>을 탄다. 라이킹역에서 내려 <b>맞은편 승강장</b>에서 췬완선 <b>중앙(Central 中環) 방면</b>으로 갈아탄다.</p>
+      <p class="m"><span class="warn">막차 대략 자정</span></p></div></li>
+    <li><span class="dot"></span><div class="t">21:30</div><div>
+      <p class="n"><span class="e">🏨</span>호텔 복귀</p>
+      <p class="d">택시로 오면 크로스하버 터널을 지나 약 35분, 요금은 HK$300 안팎이다.</p></div></li>
+  </ol>
+</section>
+
+<!-- ============ DAY 5 ============ -->
+<section class="day is-kowloon" id="d5" role="tabpanel" aria-labelledby="t5" hidden>
+  <div class="day-head">
+    <h2 class="day-title">마지막 오전</h2>
+    <p class="base"><em>몬드리안</em> 체크아웃 · 조식 Avoca 38층 06:30–10:30 · 16:50 출발</p>
+  </div>
+  <ol>
+    <li><span class="dot"></span><div class="t">09:00</div><div>
+      <p class="n"><span class="e">☕</span>조식 · Avoca 38층 <span class="hrs">06:30–10:30</span></p>
+      <p class="d">창가 자리는 경쟁이 있으니 일찍 올라간다.</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">10:00</div><div>
+      <p class="n"><span class="e">🧳</span>구룡역 시내 사전 체크인</p>
+      <p class="d">짐을 미리 부치면 오전을 온전히 쓸 수 있다.</p>
+      <p class="m"><span>케세이 가능 여부 확인</span></p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">11:30</div><div>
+      <p class="n"><span class="e">🛒</span>Watson's Wine 하노이로드점</p>
+      <p class="d">18 Hanoi Road. 호텔에서 도보 3분.</p>
+      <p class="m"><span>11:30–20:00</span><span class="warn">한국 반입 2병까지</span></p></div></li>
+    <li><span class="dot"></span><div class="t">12:30</div><div>
+      <p class="n"><span class="e">🍽</span>마지막 딤섬</p></div></li>
+    <li><span class="dot"></span><div class="t">14:00</div><div>
+      <p class="n"><span class="e">🚄</span>에어포트 익스프레스</p>
+      <p class="d">구룡역에서 공항까지 22분.</p></div></li>
+    <li class="key"><span class="dot"></span><div class="t">16:50</div><div>
+      <p class="n"><span class="e">✈️</span>CX416 출발</p>
+      <p class="d">인천 21:25 도착.</p></div></li>
+  </ol>
+</section>
+
+<!-- ============ NOTES ============ -->
+<section class="day" id="d6" role="tabpanel" aria-labelledby="t6" hidden>
+  <div class="note-sec">
+    <h3>미리 예약할 네 곳</h3>
+    <ul class="book">
+      <li><b>James Suckling Wine Central</b> — 화 18:00
+        <span>좌석이 적으니 2~3주 전에 연락한다. 클로드가 고른 두 병은 8월 리스트 기준이라 11월에 남아 있는지, 미리 잡아둘 수 있는지, 코르크 불량 시 교체가 되는지 함께 확인한다.</span></li>
+      <li><b>Mott 32</b> — 화 12:00
+        <span>예약할 때 베이징덕을 반드시 함께 주문한다.</span></li>
+      <li><b>船記 Ship Kee</b> — 월 18:30
+        <span>요즘 홍콩에서 예약이 가장 어려운 식당 중 하나다.</span></li>
+      <li><b>DIECI</b> — 수 12:00
+        <span>재혁이 보낸 아홉 곳 중 평점이 가장 높다. 월요일 휴무라 수요일이 유일한 날이다.</span></li>
+    </ul>
+  </div>
+
+  <div class="note-sec">
+    <h3>호텔</h3>
+    <ul class="book">
+      <li><b>AKI 홍콩 – 엠갤러리</b> · 11/23–25
+        <span>239 Jaffe Road, 완차이 · 조식 TANGRAM 2층 06:30–10:30 · Uncle Ming's 25층 17:00–24:00, 엘리트 회원 웰컴 드링크 · 드레스코드 스마트 캐주얼, 18세 이상</span></li>
+      <li><b>몬드리안 홍콩</b> · 11/25–27
+        <span>8A Hart Avenue, 침사추이 · 조식 Avoca 38층 평일 06:30–10:30 · Carna 39층 18:00–24:00 · 수영장 없음</span></li>
+    </ul>
+  </div>
+
+  <div class="note-sec">
+    <h3>멤버십 — 재혁 아코르 플래티넘</h3>
+    <ul class="facts">
+      <li><i>·</i><div><b>두 호텔 예약을 모두 재혁 계정으로 잡을 것.</b> 홍콩은 아시아태평양이라 플래티넘은 매일 조식이 무료고, 같은 방에 등록한 동반자까지 포함된다. 원우 이름으로 예약하면 조식이 유료다. 몬드리안 기준 1인 HK$220~270.</div></li>
+      <li><i>·</i><div>방을 따로 쓴다면 두 방 모두 재혁 계정으로 예약해야 한다. 혜택은 예약한 회원과 같은 방에 등록된 사람에게만 적용된다.</div></li>
+      <li><i>·</i><div><b>스위트 나이트 업그레이드가 남아 있는지 확인.</b> 60박 또는 14,000 스테이터스 포인트를 채우면 2장이 나온다. 남아 있다면 AKI와 몬드리안에 한 장씩 쓴다. 앱이나 전화로 미리 신청해야 하며 현장 접수는 되지 않는다.</div></li>
+      <li><i>·</i><div>웰컴 드링크는 실버 이상 회원과 같은 방 투숙객까지 받는다. ALL 앱에 디지털 바우처로 들어오며 Uncle Ming's에서 쓸 수 있다.</div></li>
+      <li><i>·</i><div>두 호텔 모두 이그제큐티브 라운지가 없다. 조식은 레스토랑에서 제공되며 라운지 혜택은 이번에 쓸 일이 없다.</div></li>
+    </ul>
+  </div>
+
+  <div class="note-sec">
+    <h3>알아둘 것</h3>
+    <ul class="facts">
+      <li><i>·</i><div>한국 입국 시 주류 면세는 2병, 합산 2리터, 미화 400달러까지다. 좋은 두 병에 집중하는 편이 낫다.</div></li>
+      <li><i>·</i><div>홍콩은 와인 관세와 부가세가 모두 없다. 부르고뉴와 샴페인처럼 한국에서 유통 마진이 큰 와인일수록 차이가 크다.</div></li>
+      <li><i>·</i><div>태풍 3호 이상이나 적색·흑색 폭우 경보가 15시 이후 발령되면 심포니 오브 라이트는 그날 취소된다.</div></li>
+      <li><i>·</i><div>디즈니 가는 날 비가 오면 화요일과 목요일을 통째로 맞바꾸는 방법뿐이다. 이때 JSWC 예약도 함께 옮겨야 한다.</div></li>
+      <li><i>·</i><div>Uncle Ming's는 슬리퍼나 운동복 차림으로 입장할 수 없다. 남성은 발을 덮는 신발과 소매 있는 셔츠를 갖춰야 한다.</div></li>
+      <li><i>·</i><div>모든 식당에 10% 서비스 차지가 붙는다</div></li>
+      <li><i>·</i><div>H2K를 홍콩섬에서 타고 크로스하버 터널을 지난 정류장에서 내리면 하차할 때 요금을 다시 내야 한다. 침사추이에서 타고 침사추이로 돌아오면 해당 없다</div></li>
+    </ul>
+  </div>
+
+  <div class="note-sec">
+    <h3>못 넣은 예비</h3>
+    <ul class="book">
+      <li><b>Qi – House of Sichuan</b> <span>완차이에 있다. Ship Kee 예약이 안 되면 첫 번째 대안이다.</span></li>
+      <li><b>Sick Burger</b> <span>코즈웨이베이에 있다. 좌석이 적어 대기가 길다.</span></li>
+      <li><b>Akira Back</b> <span>The Henderson 5층. 화요일 일정이 이미 차서 이번에는 어렵다.</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer>2026년 9월 기준으로 정리했다. 영업시간과 재고는 바뀔 수 있으니 출발 전에 한 번 더 확인할 것.</footer>
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.pill'));
+  function show(i){
+    tabs.forEach(function(tab, j){
+      var on = i === j;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
+    });
+    window.scrollTo({top: 0, behavior: 'instant'});
+  }
+  tabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){ show(i); });
+    tab.addEventListener('keydown', function(e){
+      var n = e.key === 'ArrowRight' ? i+1 : e.key === 'ArrowLeft' ? i-1 : -1;
+      if (n >= 0 && n < tabs.length){ e.preventDefault(); tabs[n].focus(); show(n); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
